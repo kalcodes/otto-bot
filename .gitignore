@@ -1,0 +1,13 @@
+todo.md
+idea.md
+**/.env
+**/.env.local
+**/*bak*
+
+dist/
+build/
+node_modules/
+.wrangler/
+
+wrangler-backup.jsonc
+

@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS messages;
+
+CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+    chat_id TEXT,
+    role TEXT,
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS auth;
+
+CREATE TABLE IF NOT EXISTS auth (
+    chat_id TEXT UNIQUE
+)
