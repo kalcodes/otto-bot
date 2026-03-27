@@ -38,9 +38,11 @@ Finally, open your bot, `/start` it and send `/setup` command this will initiali
 - Chats must be authorized before they can interact with the bot.
 - The user with `ADMIN_ID` is always authorized, also only the this user can authorize new chats.
 - If group chats are authorized all members can interact with the bot.
+
 ---
+
 With all of that done, you can start using your personal AI bot.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/0x4b414c/otto-bot)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/kalcodes/otto-bot)
 
-Pull Requests are welcomed. If you have any problems ask on the `Descussion` section or create issue in this repository. 
+Pull Requests are welcomed. If you have any problems ask on the `Descussion` section or create issue in this repository.
