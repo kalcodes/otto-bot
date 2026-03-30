@@ -155,8 +155,11 @@ bot.onUpdate(
     const { chatId, messageId } = ctx;
     const { command } = ctx.message;
 
-    if (!command || !(command in ModelConfig) || command !== "otto") return;
-
+    if (!command) return;
+    if (!["otto", ...Object.keys(ModelConfig)].includes(command)) {
+      await ctx.reply("Unknown command!");
+      return;
+    }
     await withMiddelware(
       ctx,
       async () => {

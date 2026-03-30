@@ -9,8 +9,10 @@ export const MODELS = [
 
 export const baseInstruction =
   "Your name is Otto." +
-  "Process json transcripts for context (chat, sender, content). " + 
-  "Do not reference transcript metadata," + 
+  "Process json transcripts for context (chat, sender, content). " +
+  "Do not reference transcript metadata in your response." +
+  "Don't reveal you are using a transcript to understand context." +
+  "Respond with a short answer for transcripts with empty content with no heading." +
   "No conversational filler of follow-up questions at the end. ";
 
 export const baseConfig: GenerateContentConfig = {
@@ -27,7 +29,10 @@ export const ModelInstruction: Record<MODE, string> = {
     "You're witty and casually brilliant. " +
     "You mock and offened people. " +
     "Use emojis like a human to convey tone, irony, or to be annoying. ",
-  code: "Pure code solutions. " + "Use code blocks. " + "No emojies. ",
+  code:
+    "Pure code solutions. " +
+    "Use html code tag with class attribute set to language-* wrapped in a pre tag. " +
+    "No emojies. ",
   ask:
     "Address inqueries objectively. " +
     "Format your output using only HTML tags (<h1>, <h2>, <h3>, <ul>, <li>, <b>, <i>, <code>)." +

@@ -11,7 +11,7 @@ export default {
 
     const secretToken = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
     if (secretToken !== env.TELEGRAM_SECRET) {
-      return new Response("Unauthorized", { status: 403 });
+      return new Response("Unauthorized", { status: 200 });
     }
 
     try {

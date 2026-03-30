@@ -45,11 +45,8 @@ export function createTranscript(ctx: MessageContext): Transcript {
 export function clearHtml(text: string) {
   return text
     .replace(/^[ \t]+/gm, "")
-    .replace(/<h1>(.*?)<\/h1>/gi, "⬜ <b>$1</b>\n")
-    .replace(/<h2>(.*?)<\/h2>/gi, "◻️ <b>$1</b>\n")
-    .replace(/<h3>(.*?)<\/h3>/gi, "◻️ <b>$1</b>\n")
-    .replace(/<h4>(.*?)<\/h4>/gi, "▫️ <b>$1</b>\n")
-    .replace(/<li>/gi, "  - ")
+    .replace(/<h\d>(.*?)<\/h\d>/gi, "◻️ <b>$1</b>\n")
+    .replace(/<li>/gi, "- ")
     .replace(/<\/li>/gi, "\n")
     .replace(/<\/?(ul|ol|div|p|section|article)>/gi, "")
     .replace(/\n{3,}/g, "\n\n")
