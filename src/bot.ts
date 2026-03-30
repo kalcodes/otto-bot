@@ -155,7 +155,7 @@ bot.onUpdate(
     const { chatId, messageId } = ctx;
     const { command } = ctx.message;
 
-    if (!command || !(command in ModelConfig) || command === "otto") return;
+    if (!command || !(command in ModelConfig) || command !== "otto") return;
 
     await withMiddelware(
       ctx,
