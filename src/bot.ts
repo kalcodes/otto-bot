@@ -16,19 +16,17 @@ const bot = initBot(env);
 
 // Welcome user
 bot.onCommand("start", async (ctx) => {
-  await withMiddelware(ctx, async () => {
-    await ctx.reply(
-      `
+  await ctx.reply(
+    `
 🤖 Hi! I'm otto, your personal AI. 
 Use the /usage to see all available commands.
 
 Tip: this project is available for free on <a href="https://github.com/0x4b414c/otto-bot">github</a>. 
 `,
-      {
-        parse_mode: "HTML",
-      },
-    );
-  });
+    {
+      parse_mode: "HTML",
+    },
+  );
 });
 
 // Authorize chat
@@ -72,7 +70,9 @@ bot.onCommand("auth_list", async (ctx) => {
 
 // Gets chat ID
 bot.onCommand("id", async (ctx) => {
-  await ctx.reply(`Chat ID: ${ctx.chatId}`);
+  await ctx.reply(`Chat ID: <code>${ctx.chatId}</code>`, {
+    parse_mode: "HTML",
+  });
 });
 
 // Sets up bot
@@ -81,7 +81,7 @@ bot.onCommand("setup", async (ctx) => {
     ctx,
     async () => {
       await setUpBot(ctx);
-      await ctx.reply("✅ Done setting up  bot.");
+      await ctx.reply("✅ Done setting up bot.");
     },
     { auth: "admin" },
   );
@@ -92,10 +92,11 @@ bot.onCommand("history", async (ctx) => {
   await withMiddelware(
     ctx,
     async () => {
-      const h = await env.KV.get("history");
-      await env.KV.put("history", !h || h === "off" ? "on" : "off");
+      const history = await env.KV.get("history");
+      const historyEnabled = history === "on";
+      await env.KV.put("history", !historyEnabled ? "on" : "off");
       await ctx.reply(
-        `Chat history ${!h || h === "off" ? "enabled" : "disabled"} successfully.`,
+        `Chat history ${!historyEnabled ? "enabled" : "disabled"} successfully.`,
       );
     },
     {
@@ -154,24 +155,28 @@ bot.onUpdate(
     const { chatId, messageId } = ctx;
     const { command } = ctx.message;
 
-    if (!command) return;
-    await withMiddelware(ctx, async () => {
-      let mode: string | null = command;
-      if (command.toLowerCase() === "otto") {
-        mode = (await env.KV.get("mode")) || "wit";
-      }
-      if (!mode || !(mode in ModelConfig)) return;
+    if (!command || !(command in ModelConfig) || command === "otto") return;
 
-      const transcript = createTranscript(ctx);
-      const answer = await generateAnswer(chatId, transcript, mode as MODE);
-      const cleared = ["ask", "explain", "summerize"].includes(mode)
-        ? clearHtml(answer)
-        : answer;
-      await ctx.reply(cleared, {
-        parse_mode: "HTML",
-        reply_to_message_id: messageId,
-      });
-    });
+    await withMiddelware(
+      ctx,
+      async () => {
+        let mode: string = command;
+        if (command.toLowerCase() === "otto") {
+          mode = (await env.KV.get("mode")) || "wit";
+        }
+
+        const transcript = createTranscript(ctx);
+        const answer = await generateAnswer(chatId, transcript, mode as MODE);
+        const cleared = ["ask", "explain", "summerize"].includes(mode)
+          ? clearHtml(answer)
+          : answer;
+        await ctx.reply(cleared, {
+          parse_mode: "HTML",
+          reply_to_message_id: messageId,
+        });
+      },
+      { action: "typing" },
+    );
   },
   filters.textMatches(/^\//),
 );

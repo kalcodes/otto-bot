@@ -10,13 +10,11 @@ export function isAdmin(userId: string | number) {
 export async function isAuthorizedChat(chatId: string | number) {
   if (isAdmin(chatId)) return true;
 
-  const result: string[] = await env.DB.prepare(
-    "SELECT 1  FROM auth WHERE chat_id = ?;",
-  )
-    .bind(chatId)
-    .raw();
+  const result = await env.DB.prepare("SELECT 1  FROM auth WHERE chat_id = ?;")
+    .bind(String(chatId))
+    .first();
 
-  return result.length > 0;
+  return !!result;
 }
 
 export function parseName(sender: SenderInfo) {

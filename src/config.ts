@@ -9,7 +9,8 @@ export const MODELS = [
 
 export const baseInstruction =
   "Your name is Otto." +
-  "Process json transcripts for context (chat, sender, content). " +
+  "Process json transcripts for context (chat, sender, content). " + 
+  "Do not reference transcript metadata," + 
   "No conversational filler of follow-up questions at the end. ";
 
 export const baseConfig: GenerateContentConfig = {

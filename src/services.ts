@@ -123,8 +123,8 @@ export async function generateAnswer(
 ): Promise<string> {
   let chatHistory: ChatHistory[] = [];
   const history = await env.KV.get("history");
-
-  if (history === "on") {
+  const historyEnabled = history === "on";
+  if (historyEnabled) {
     chatHistory = chatHistory.concat(await getChatHistory(chatId));
   }
   const contents = [
@@ -137,10 +137,12 @@ export async function generateAnswer(
     "INSERT INTO messages (chat_id, role, message) VALUES (?, ?, ?);",
   );
 
-  await env.DB.batch([
-    stmt.bind(chatId, "user", JSON.stringify(transcript)),
-    stmt.bind(chatId, "model", answer),
-  ]);
+  if (historyEnabled) {
+    await env.DB.batch([
+      stmt.bind(chatId, "user", JSON.stringify(transcript)),
+      stmt.bind(chatId, "model", answer),
+    ]);
+  }
 
   return answer;
 }
